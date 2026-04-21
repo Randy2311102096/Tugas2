@@ -41,3 +41,20 @@ app.post('/hapus/:id', (req, res) => {
 app.listen(3000, () => {
     console.log('Server berjalan di http://localhost:3000');
 });
+
+// Halaman Edit: Mengambil data lama berdasarkan ID
+app.get('/edit/:id', (req, res) => {
+    const id = req.params.id;
+    db.get("SELECT * FROM tugas WHERE id = ?", [id], (err, row) => {
+        res.render('edit', { tugas: row });
+    });
+});
+
+// Proses Update: Mengubah data di database
+app.post('/update/:id', (req, res) => {
+    const id = req.params.id;
+    const isiBaru = req.body.item;
+    db.run("UPDATE tugas SET isi = ? WHERE id = ?", [isiBaru, id], (err) => {
+        res.redirect('/');
+    });
+});
